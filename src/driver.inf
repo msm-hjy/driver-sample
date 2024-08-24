@@ -1,0 +1,44 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=Media
+ClassGuid={C0C1D202-5B42-4E9F-8121-8D2C41EAB2A6}
+Provider=%MfgName%
+DriverVer=08/18/2024,1.0.0.0
+
+[Manufacturer]
+%MfgName%=Models
+
+[Models]
+%DeviceDesc%=Install, ROOT\VideoCapture
+
+[Install]
+CopyFiles=DriverFiles
+
+[SourceDisksNames]
+1=%DiskName%,,,""
+
+[SourceDisksFiles]
+driver.sys=1
+
+[DestinationDirs]
+DefaultDestDir=0
+
+[DriverFiles]
+driver.sys
+
+[Install.Services]
+AddService = %ServiceName%,, %Service_Inst%
+
+[Service_Inst]
+DisplayName=%ServiceDisplayName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\driver.sys
+
+[Strings]
+MfgName="Video Manufacturer"
+DeviceDesc="Video Capture"
+DiskName="Video Capture Driver Disk"
+ServiceName="VideoCaptureService"
+ServiceDisplayName="Video Capture Service"
