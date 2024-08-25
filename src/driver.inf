@@ -1,0 +1,27 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sample
+ClassGuid={00000000-0000-0000-0000-000000000000}
+Provider=%MfgName%
+DriverVer=08/24/2024,1.0.0.0
+
+[Manufacturer]
+%MfgName%=Models
+
+[Models]
+%DeviceDesc%=InstallSection, *PNP_DEVICE_ID
+
+[InstallSection]
+CopyFiles=DriverCopyFiles
+
+[DriverCopyFiles]
+HelloWorldDriver.sys
+
+[SourceDisksNames]
+1="Driver Disk",,,
+
+[SourceDisksFiles]
+HelloWorldDriver.sys=1
+
+[DefaultInstall]
+CopyFiles=DriverCopyFiles
