@@ -1,0 +1,28 @@
+{
+  "configurations": [
+      {
+          "name": "Win32",
+          "includePath": [
+              "${workspaceFolder}/**",
+              "C:/EWDK/Program Files/Windows Kits/10/Include/10.0.17763.0/shared",
+              "C:/EWDK/Program Files/Windows Kits/10/Include/10.0.17763.0/um",
+              "C:/EWDK/Program Files/Windows Kits/10/Include/10.0.17763.0/km",
+              "C:/EWDK/Program Files/Windows Kits/10/Include/10.0.17763.0/ucrt",
+              "C:/EWDK/Program Files/Windows Kits/10/Include/10.0.17763.0/winrt"
+          ],
+          "defines": [
+              "_DEBUG",
+              "UNICODE",
+              "_UNICODE",
+              "_AMD64_",
+              "_WIN64"
+          ],
+        "windowsSdkVersion": "10.0.17763.0",
+          "compilerPath": "C:/EWDK/Program Files/Microsoft Visual Studio/2017/BuildTools/VC/Tools/MSVC/14.15.26726/bin/Hostx64/x64/cl.exe",
+          "cStandard": "c11",
+          "cppStandard": "c++17",
+          "intelliSenseMode": "windows-msvc-x64"
+      }
+  ],
+  "version": 4
+}

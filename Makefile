@@ -1,12 +1,52 @@
+# Makefile for building Windows driver.
+#
+# Targets:
+#   - make:       Build the driver.
+#   - make test:  Run tests for the driver.
+#   - make clean: Cleans up build artifacts.
+
 # Define the target name and output directory
-TARGETNAME=HelloWorldDriver
-TARGETPATH=build
+TARGETNAME = HelloWorldDriver
+TARGETPATH = build
 
-# Specify the source files
-SOURCES=src\HelloWorldDriver.c
+# EWDK paths and tools
+EWDK_ROOT = C:/EWDK/Program Files
+EWDK_WDK_ROOT = $(EWDK_ROOT)/Windows Kits/10/Include/10.0.17763.0
+EWDK_MSVC_ROOT = $(EWDK_ROOT)/Microsoft Visual Studio/2017/BuildTools/VC/Tools/MSVC/14.15.26726
 
-# Create the build directory if it doesn't exist
+# Paths to compiler and linker
+COMPILER = $(EWDK_MSVC_ROOT)/bin/Hostx64/x64/cl.exe
+LINKER = $(EWDK_MSVC_ROOT)/bin/Hostx64/x64/link.exe
+
+# Compiler include directories
+COMPILER_DIRS = /I"$(EWDK_WDK_ROOT)/shared" /I"$(EWDK_WDK_ROOT)/um" /I"$(EWDK_WDK_ROOT)/km" /I"$(EWDK_WDK_ROOT)/ucrt" /I"$(EWDK_WDK_ROOT)/winrt"
+COMPILER_DIRS += /I "$(EWDK_MSVC_ROOT)/include" /I "$(EWDK_MSVC_ROOT)/atlmfc/include"
+
+# Compiler flags
+COMPILER_FLAGS = /EHsc $(COMPILER_DIRS)
+COMPILER_FLAGS += /D _AMD64_ /D _WIN64 /D NTDDI_VERSION=0x0A000000 /D WINVER=0x0A00 /D _WIN32_WINNT=0x0A00 /D _UNICODE /D UNICODE /D _WDM_DRIVER /D _KERNEL_MODE
+
+# Linker include directories
+LINKER_DIRS = /LIBPATH:"$(EWDK_ROOT)/Windows Kits/10/Lib/10.0.17763.0/km/x64" ntoskrnl.lib
+LINKER_DIRS += /LIBPATH:"$(EWDK_ROOT)/Windows Kits/10/Lib/10.0.17763.0/um/x64" uuid.lib
+LINKER_DIRS += /LIBPATH:"$(EWDK_ROOT)/Windows Kits/10/Lib/10.0.17763.0/ucrt/x64" ucrt.lib
+
+# Linker flags
+LINKER_FLAGS = $(LINKER_DIRS)
+LINKER_FLAGS += /DRIVER /DRIVER:WDM /SUBSYSTEM:NATIVE /RELEASE /INCREMENTAL:NO /ENTRY:DriverEntry
+LINKER_FLAGS += /DEBUG /DEBUGTYPE:CV /PDBALTPATH:$(TARGETPATH)/$(TARGETNAME).pdb
+LINKER_FLAGS += /MAP:$(TARGETPATH)/$(TARGETNAME).map
+
+# Source and object files
+SOURCES = $(wildcard src/*.c)
+OBJECTS = $(patsubst src/%.c, $(TARGETPATH)/%.obj, $(SOURCES))
+
+# Default rule
 all:
-    if not exist $(TARGETPATH) mkdir $(TARGETPATH)
-    cl /EHsc /Fo$(TARGETPATH)\ /c $(SOURCES)
-    link /OUT:$(TARGETPATH)\$(TARGETNAME).sys $(TARGETPATH)\HelloWorldDriver.obj
+	if not exist $(TARGETPATH) mkdir $(TARGETPATH)
+	$(COMPILER) $(COMPILER_FLAGS) /Fo$(TARGETPATH)\ /c $(SOURCES)
+	$(LINKER) $(LINKER_FLAGS) /OUT:$(TARGETPATH)/$(TARGETNAME).sys $(OBJECTS)
+
+# Clean up build artifacts
+clean:
+	if exist build rd /s /q build

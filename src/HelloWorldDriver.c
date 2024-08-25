@@ -1,10 +1,9 @@
 #include <ntddk.h>
 
-extern "C" NTSTATUS
-DriverEntry(
-    _In_ PDRIVER_OBJECT   DriverObject,
-    _In_ PUNICODE_STRING  RegistryPath
-)
+// Forward declaration of UnloadDriver
+VOID UnloadDriver(PDRIVER_OBJECT DriverObject);
+
+NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING  RegistryPath)
 {
     UNREFERENCED_PARAMETER(RegistryPath);
 
@@ -14,9 +13,7 @@ DriverEntry(
     return STATUS_SUCCESS;
 }
 
-extern "C" VOID UnloadDriver(
-    _In_ PDRIVER_OBJECT DriverObject
-)
+VOID UnloadDriver(PDRIVER_OBJECT DriverObject)
 {
     UNREFERENCED_PARAMETER(DriverObject);
 
